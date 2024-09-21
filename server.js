@@ -122,7 +122,9 @@ app.post("/signUp", async (req, res) => {
 });
 
 
-
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 //verify email
 app.post("/verify-email", async (req, res) => {
   console.log('first')
