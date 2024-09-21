@@ -173,7 +173,7 @@ app.post("/forgot-password", async (req, res) => {
       to: user.email,
       from: "'SHOP.CO' <ra0511083@gmail.com>",
       subject: "Password Reset",
-      text: `Please click the following link to reset your password: \n\n http://localhost:3000/reset-password/${token} \n\n`,
+      text: `Please click the following link to reset your password: \n\n https://login-sigma-flax.vercel.app/reset-password/${token} \n\n`,
     };
 
     transporter.sendMail(mailOptions, (err) => {
