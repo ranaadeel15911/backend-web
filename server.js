@@ -65,7 +65,7 @@ const { error } = require("console");
 app.post("/signUp", async (req, res) => {
   console.log('Welcome');
   try {
-    const existingUser = await SignupUsers.findOne({ email: req.body.email.toLowerCase() });
+    const existingUser = await SignupUsers.findOne({ email: req.body.email });
 
     if (existingUser) {
       return res.status(400).send("User with this email already exists");
@@ -73,9 +73,11 @@ app.post("/signUp", async (req, res) => {
       const otp = generateOTP();
       const otpExpires = Date.now() + 10 * 60 * 1000;
 
+      // const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
       const newUser = new SignupUsers({
         ...req.body,
-        email: req.body.email.toLowerCase(), // Normalize email to lowercase
+        // password: hashedPassword,
         password: req.body.password,
         points: 100,
         role: "user",
@@ -86,6 +88,8 @@ app.post("/signUp", async (req, res) => {
       });
 
       const savedUser = await newUser.save(); // Save the new user
+
+      // After user is saved, the ID should be available
       const userId = savedUser._id;
 
       const mailOptions = {
@@ -95,20 +99,20 @@ app.post("/signUp", async (req, res) => {
         text: `Your OTP for email verification is: ${otp}`,
       };
 
-      // Send the email asynchronously
-      try {
-        await transporter.sendMail(mailOptions);
-        console.log("Email sent successfully");
-      } catch (error) {
-        console.error("Error while sending email:", error);
-        return res.status(500).send("Error sending verification email");
-      }
+      // Send email asynchronously without affecting the response
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("Error while sending email:", error);
+        } else {
+          console.log("Email sent successfully");
+        }
+      });
 
-      // Respond with user ID after sending the email
+      // Respond with user ID immediately after saving user (email sending happens in the background)
       return res.status(200).json({
         message: "User Created. Please verify your email using the OTP sent.",
         email: req.body.email,
-        userId: userId,
+        userId: userId, // Return user ID here
       });
     }
   } catch (e) {
@@ -116,7 +120,6 @@ app.post("/signUp", async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 });
-
 
 
 
