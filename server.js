@@ -5,6 +5,8 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
+require("./model/db");
+
 app.use(cors());
 app.use(myExpress.json());
 const transporter = nodemailer.createTransport({
