@@ -30,19 +30,6 @@ if (require.main === module) {
         console.log(`Server is running on http://localhost:${PORT}`);
     });
 }
-require("./model/db");
-const bcrypt = require("bcrypt");
-const SignupUsers = require("./model/user");
-const Video = require("./model/video");
-const Product = require("./model/product");
-const Comment = require("./model/comments");
-const Cart = require("./model/cart");
-const Collection = require("./model/collections");
-const Orders = require("./model/Order");
-const Blog = require("./model/blog");
-const token = require("jsonwebtoken");
-const { appendFile } = require("fs/promises");
-const { error } = require("console");
 
 
 module.exports = app; // Export the app for Vercel
