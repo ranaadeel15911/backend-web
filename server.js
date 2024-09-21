@@ -5,7 +5,7 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
-// require("./model/db");
+require("./model/db");
 const bcrypt = require("bcrypt");
 const SignupUsers = require("./model/user");
 const Video = require("./model/video");
